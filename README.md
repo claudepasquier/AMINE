@@ -1,6 +1,6 @@
 # AMINE — Active Module Identification through Network Embedding
 
-[![Koda CI](https://koda.cnrs.fr/GROUP/amine/badges/main/pipeline.svg)](https://koda.cnrs.fr/GROUP/amine/-/pipelines)
+[![Koda CI](https://src.koda.cnrs.fr/i3s-research/amine/badges/main/pipeline.svg)](https://src.koda.cnrs.fr/i3s-research/amine/-/pipelines)
 [![GitHub CI](https://github.com/claudepasquier/amine/actions/workflows/ci.yml/badge.svg)](https://github.com/claudepasquier/amine/actions/workflows/ci.yml)
 [![License: GPL v3+](https://img.shields.io/badge/License-GPLv3%2B-blue.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.0000000.svg)](https://doi.org/10.5281/zenodo.0000000)
