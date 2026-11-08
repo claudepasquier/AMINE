@@ -49,13 +49,23 @@ build-image:
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  variables:
+    # Koda runners do not always inject the CI_REGISTRY_* variables; fall
+    # back to the standard GitLab registry host for this instance.
+    REGISTRY: "${CI_REGISTRY:-src.koda.cnrs.fr:4567}"
+    IMAGE: "${CI_REGISTRY_IMAGE:-src.koda.cnrs.fr:4567/i3s-research/amine}"
   before_script:
-    - podman login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - echo "Registry=$REGISTRY Image=$IMAGE"
+    - if [ -n "$CI_REGISTRY_USER" ] && [ -n "$CI_REGISTRY_PASSWORD" ]; then
+        podman login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$REGISTRY";
+      else
+        echo "No registry credentials provided; skipping login";
+      fi
   script:
     - podman --storage-driver=vfs build
         --build-arg BASE_IMAGE="bin.koda.cnrs.fr/docker-ci/python:3.12-slim"
         --build-arg AMINE_SPECIES="human"
-        -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
-        -t "$CI_REGISTRY_IMAGE:latest" .
-    - podman --storage-driver=vfs push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
-    - podman --storage-driver=vfs push "$CI_REGISTRY_IMAGE:latest"
+        -t "$IMAGE:$CI_COMMIT_SHORT_SHA"
+        -t "$IMAGE:latest" .
+    - podman --storage-driver=vfs push "$IMAGE:$CI_COMMIT_SHORT_SHA"
+    - podman --storage-driver=vfs push "$IMAGE:latest"
