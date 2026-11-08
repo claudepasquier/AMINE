@@ -57,6 +57,14 @@ build-image:
     IMAGE: "src.koda.cnrs.fr/i3s-research/amine"
   before_script:
     - echo "Registry=$REGISTRY Image=$IMAGE"
+    - test -n "$DOCKER_AUTH_CONFIG" && echo "DOCKER_AUTH_CONFIG is present" || echo "DOCKER_AUTH_CONFIG is absent"
+    # Use one podman auth file: seed it with the runner-provided credentials
+    # (needed to pull the base image from bin.koda.cnrs.fr) and then add the
+    # project registry login (needed to push the built image).
+    - export REGISTRY_AUTH_FILE="$CI_PROJECT_DIR/.containers-auth.json"
+    - if [ -n "$DOCKER_AUTH_CONFIG" ] && [ -f "$DOCKER_AUTH_CONFIG" ]; then cp "$DOCKER_AUTH_CONFIG" "$REGISTRY_AUTH_FILE"; fi
+    - if [ -n "$DOCKER_AUTH_CONFIG" ] && [ ! -f "$DOCKER_AUTH_CONFIG" ]; then printf '%s' "$DOCKER_AUTH_CONFIG" > "$REGISTRY_AUTH_FILE"; fi
+    - if [ -z "$DOCKER_AUTH_CONFIG" ]; then printf '{"auths":{}}' > "$REGISTRY_AUTH_FILE"; fi
     - if [ -n "$CI_REGISTRY_USER" ] && [ -n "$CI_REGISTRY_PASSWORD" ]; then
         podman login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$REGISTRY";
       else
