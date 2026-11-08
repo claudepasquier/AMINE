@@ -78,5 +78,11 @@ build-image:
         --build-arg AMINE_SPECIES=""
         -t "$IMAGE:$CI_COMMIT_SHORT_SHA"
         -t "$IMAGE:latest" .
+    # The push is best-effort: if the project's Container Registry is not
+    # enabled on Koda, the push returns 404 and the job would otherwise fail.
+    # Enable the registry (Settings -> General -> Container Registry) to make
+    # the push effective.
     - podman push "$IMAGE:$CI_COMMIT_SHORT_SHA"
+        || echo "WARNING: push failed - is the Container Registry enabled for this project?"
     - podman push "$IMAGE:latest"
+        || echo "WARNING: push failed - is the Container Registry enabled for this project?"
