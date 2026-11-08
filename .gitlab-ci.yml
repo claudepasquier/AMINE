@@ -50,10 +50,10 @@ build-image:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   variables:
-    # Koda runners do not always inject the CI_REGISTRY_* variables; fall
-    # back to the standard GitLab registry host for this instance.
-    REGISTRY: "${CI_REGISTRY:-src.koda.cnrs.fr:4567}"
-    IMAGE: "${CI_REGISTRY_IMAGE:-src.koda.cnrs.fr:4567/i3s-research/amine}"
+    # GitLab does not support shell-style default expansion in `variables:`,
+    # so hardcode the Koda registry host and project image path.
+    REGISTRY: "src.koda.cnrs.fr:4567"
+    IMAGE: "src.koda.cnrs.fr:4567/i3s-research/amine"
   before_script:
     - echo "Registry=$REGISTRY Image=$IMAGE"
     - if [ -n "$CI_REGISTRY_USER" ] && [ -n "$CI_REGISTRY_PASSWORD" ]; then
