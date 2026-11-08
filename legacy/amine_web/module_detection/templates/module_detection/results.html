@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% extends "module_detection/base.html" %}
+{% load static %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'module_detection/style.css' %}" />
+{% endblock css %}
+
+{% block results_navbar %}
+<li class="nav-item">
+  <a class="nav-link active" href="">Results</a><span class="sr-only">(current)</span>
+</li>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="row marketing">
+  <div class=" col-lg-12">
+    <h4>Your results</h4>
+    <p></p>
+  </div>
+
+
+  {% if processed %}
+
+  <div class="col-lg-12 inputs_div">
+        <p>Job informations :</p>
+        <p class="inputs">    Job title: {{ input_job_title }}</p>
+        <p class="inputs">    File: {{ input_file }}</p>
+        <p class="inputs">    Column with gene names: {{ input_gene_col }}</p>
+        <p class="inputs">    Column with p-values: {{ input_pvalue_col }}</p>
+        <p class="inputs">    Specie: {{ input_specie }}</p>
+  </div>
+
+  	{% if job_success %}
+  <div class="col-lg-12">
+    <div class="row">
+
+      {% for output_module in list_results %}
+      <div class="list_result col-lg-2 col-md-3 col-sm-4">
+	<div class="col-lg-10 col-md-10 col-sm-10 border">
+        {% for output_gene in output_module %}
+          <p class="gene_result">{{ output_gene }}</p>
+        {% endfor %}
+	</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <a class="btn btn-secondary" href="download">Download full results</a></br><p></p>
+
+  	{% else %}
+
+	<p>Your job has failed. Please verify The informations you entered or contact an administrator</p>
+
+	{% endif %}
+
+  {% else %}
+
+
+  <div class="col-lg-12 text-center">
+    </br><h4>Your results</h4>
+
+
+    <p class="font-weight-bold">Your data are still being processed. You will
+      receive an email when your results are ready</p>
+    <p>You can expect your results to be delivered in approximatively {{ time_to_results }} hours.</p>
+
+  </div>
+  {% endif %}
+
+
+
+</div>
+
+{% endblock content %}

@@ -1,0 +1,48 @@
+{
+    "title": "AMINE — Active Module Identification through Network Embedding",
+    "description": "AMINE identifies active modules in biological interaction networks by combining network embedding (node2vec) with a greedy module search and a statistical background correction. This repository is the unified, modernized version of the software, including a command-line interface and a web application.",
+    "creators": [
+        {
+            "name": "Pasquier, Claude",
+            "affiliation": "I3S Laboratory, CNRS, Université Côte d'Azur",
+            "email": "claude.pasquier@univ-cotedazur.fr"
+        },
+        {
+            "name": "Guerlais, Vincent",
+            "affiliation": "I3S Laboratory, CNRS, Université Côte d'Azur",
+            "email": "vincent.guerlais@univ-cotedazur.fr"
+        },
+        {
+            "name": "Pallez, Denis",
+            "affiliation": "I3S Laboratory, CNRS, Université Côte d'Azur",
+            "email": "denis.pallez@univ-cotedazur.fr"
+        },
+        {
+            "name": "Rapetti-Mauss, Raphaël",
+            "affiliation": "Institut de Biologie Valrose (IBV), CNRS, INSERM, Université Côte d'Azur",
+            "email": "raphael.rapetti-mauss@univ-cotedazur.fr"
+        },
+        {
+            "name": "Soriani, Olivier",
+            "affiliation": "Institut de Biologie Valrose (IBV), CNRS, INSERM, Université Côte d'Azur",
+            "email": "olivier.soriani@univ-cotedazur.fr"
+        }
+    ],
+    "license": "GPL-3.0-or-later",
+    "keywords": [
+        "bioinformatics",
+        "network embedding",
+        "active module identification",
+        "protein-protein interaction",
+        "node2vec"
+    ],
+    "related_identifiers": [
+        {
+            "identifier": "10.26508/lsa.202201550",
+            "relation": "isDescribedBy",
+            "scheme": "doi"
+        }
+    ],
+    "upload_type": "software",
+    "access_right": "open"
+}

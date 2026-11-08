@@ -1,0 +1,160 @@
+/* The HTML ``hidden`` attribute must win over the explicit ``display`` rules
+   below (e.g. ``button { display: inline-block }``), otherwise hidden buttons
+   stay visible. */
+[hidden] {
+    display: none !important;
+}
+
+:root {
+    --bg: #f5f7fa;
+    --card: #ffffff;
+    --accent: #1f6feb;
+    --text: #1b1f24;
+    --muted: #57606a;
+    --border: #d0d7de;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+}
+
+header {
+    background: var(--accent);
+    color: #fff;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    letter-spacing: 0.05em;
+}
+
+.subtitle {
+    margin: 0.25rem 0 0;
+    opacity: 0.9;
+}
+
+main {
+    max-width: 820px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: grid;
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+input,
+select {
+    display: block;
+    width: 100%;
+    margin-top: 0.35rem;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0 1rem;
+}
+
+button,
+.button {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.65rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+button:hover,
+.button:hover {
+    background: #1a5fd0;
+}
+
+.hint {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+progress {
+    width: 100%;
+    height: 1rem;
+}
+
+button.danger {
+    background: #b42318;
+    margin-top: 0.5rem;
+}
+
+button.danger:hover {
+    background: #8f1c13;
+}
+
+.warning {
+    color: #b42318;
+    font-weight: 600;
+}
+
+#job-stage {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+pre {
+    background: #fff5f5;
+    border: 1px solid #ffc9c9;
+    border-radius: 6px;
+    padding: 0.75rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    font-size: 0.8rem;
+}
+
+code {
+    background: #eef1f4;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+}
+
+footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 2rem 1rem;
+}

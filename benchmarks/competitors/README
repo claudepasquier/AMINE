@@ -1,0 +1,15 @@
+## Test active modules tools from simulated networks
+## Author: Leandro Correa 25.09.2019
+
+
+## TOOLS
+- BioNet;
+- COSINE;
+- GIGA.
+
+## Exectuion
+- For more details execute:
+
+Rscript COSINE_test.R --help 
+Rscript BIONET_test.R --help 
+Rscript GIGA_test.R --help 

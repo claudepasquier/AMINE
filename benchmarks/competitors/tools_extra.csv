@@ -1,0 +1,6 @@
+"name","year","reference","principle","langage","type","note","link to the executable","link to the article"
+"MCODE",2003,"Bader & Hogue, 2003","Local density-based clustering","Java","Cytoscape plugin","not tested","https://apps.cytoscape.org/apps/mcode","https://doi.org/10.1186/1471-2105-4-2"
+"ClusterONE",2012,"Nepusz et al., 2012","Greedy growth of cohesive groups","Java","cmd","not tested","https://github.com/ntamas/cl1","https://doi.org/10.1038/nmeth.1938"
+"MEGENA",2015,"Song & Zhang, 2015","Multiscale embedded gene co-expression networks","R","cmd","not tested","https://cran.r-project.org/package=MEGENA","https://doi.org/10.1093/nar/gkv421"
+"PCSF",2017,"Akhmedov et al., 2017","Prize-collecting Steiner forest","R","cmd","not tested","https://github.com/ucsd-ccbb/forest","https://doi.org/10.1093/bioinformatics/btx421"
+"SIGNET",2020,"Liu et al., 2020","Network propagation with significance estimation","Python","cmd","not tested","https://github.com/gersteinlab/SIGNET","https://doi.org/10.1093/bioinformatics/btaa1004"

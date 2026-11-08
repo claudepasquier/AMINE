@@ -1,0 +1,60 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Amine</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{% static 'module_detection/bootStrap/css/bootstrap.css' %}" />
+
+    <!-- Custom styles for this template -->
+    {% block css %}{% endblock css %}
+
+    <!-- Custom head block -->
+    {% block head %}{% endblock %}
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="header clearfix" style="margin-block: 3%">
+        <nav>
+          <ul class="nav nav-pills float-right">
+            <li class="nav-item">
+              {% block current_navbar_home %}<a class="nav-link" href="{% url 'index' %}">Home</a>{% endblock %}
+            </li>
+            {% block results_navbar %}{% endblock %}
+            <li class="nav-item">
+              {% block current_navbar_about %}<a class="nav-link" href="{% url 'about' %}">About</a>{% endblock %}
+            </li>
+            <li class="nav-item">
+              {% block current_navbar_contact %}<a class="nav-link" href="{% url 'contact' %}">Contact</a>{% endblock %}
+            </li>
+          </ul>
+        </nav>
+        <h3 class="text-muted"><img src="{% static "module_detection/I3S.png" %}" style="margin-right: 3%" width="128" height="50"><img src="{% static "module_detection/CNRS.png" %}" style="margin-right: 3%" width="64" height="50">AMINE</h3>
+      </div>
+
+      <hr/>
+
+
+    {% block content %}{% endblock content %}
+
+    <hr/>
+
+    <footer class="footer">
+      <p>I3S 2020</p>
+    </footer>
+
+  </div> <!-- /container -->
+    <!-- Bootstrap core JavaScript -->
+
+    <link rel="stylesheet" href="{% static 'module_detection/bootStrap/js/bootstrap.js' %}" />
+
+    <!-- Custom JavaScript -->
+    {% block js %}{% endblock js %}
+  </body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AMINE — Active Module Identification through Network Embedding</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+
+<body>
+  <header>
+    <h1>AMINE</h1>
+    <p class="subtitle">
+      Active Module Identification through Network Embedding
+    </p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Run a module-detection job</h2>
+      <form id="job-form">
+        <label>
+          Expression values file (CSV or XLSX)
+          <input type="file" name="expvalue_file" accept=".csv,.xlsx,.xls" required />
+        </label>
+
+        <label>
+          Focus genes file (optional, one gene per line)
+          <input type="file" name="focus_genes_file" accept=".txt,.csv" />
+        </label>
+
+        <label>
+          Custom network file (optional, edge list: source <tab> target)
+            <input type="file" name="network_file" accept=".tsv,.txt,.csv" />
+        </label>
+
+        <label>
+          E-mail (optional, notified when the job finishes)
+          <input type="email" name="email" placeholder="you@example.org" />
+        </label>
+
+        <div class="grid">
+          <label>
+            Species
+            <select name="specie">
+              <option value="human">human</option>
+              <option value="mouse">mouse</option>
+              <option value="drosophila">drosophila</option>
+            </select>
+          </label>
+
+          <label>
+            Network
+            <select name="network">
+              <option value="string">STRING</option>
+              <!-- BioGRID and IntAct are not available on the web front-end:
+                   only the STRING networks are baked into the image. -->
+            </select>
+          </label>
+
+          <label>
+            Gene column index (0-based)
+            <input type="number" name="gene_col" value="0" min="0" required />
+          </label>
+
+          <label>
+            log2 fold-change column index (0-based)
+            <input type="number" name="log2fc_col" min="0" />
+          </label>
+
+          <label>
+            p-value column index (0-based)
+            <input type="number" name="pvalue_col" min="0" />
+          </label>
+
+          <label>
+            Aggregation method
+            <select name="aggregation_method">
+              <option value="pvalue">pvalue</option>
+              <option value="log2fc">log2fc (needs the log2fc column, no p-value column)</option>
+              <option value="pivalue" disabled>pivalue (not implemented)</option>
+              <option value="count" disabled>count (not implemented)</option>
+            </select>
+          </label>
+
+          <label>
+            Max number of modules (optional)
+            <input type="number" name="nb_modules_to_find" min="1" />
+          </label>
+        </div>
+
+        <button type="submit">Submit job</button>
+        <p class="hint">Maximum upload size: {{ max_upload_mb }} MB.</p>
+      </form>
+    </section>
+
+    <section class="card" id="status-card" hidden>
+      <h2>Job status</h2>
+      <p>Job id: <code id="job-id"></code></p>
+      <p>Status: <strong id="job-status"></strong></p>
+      <p id="job-queue" hidden></p>
+      <p id="job-mapping" hidden></p>
+      <div id="job-progress-wrap" hidden>
+        <progress id="job-progress" value="0" max="1"></progress>
+        <span id="job-stage"></span>
+      </div>
+      <pre id="job-error" hidden></pre>
+      <button id="abort-button" type="button" class="danger" hidden>Abort job</button>
+      <div id="job-result" hidden>
+        <a id="download-link" class="button" href="#">Download results (.xlsx)</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      AMINE is free software released under the GNU GPL v3 or later.
+      See the <a href="https://github.com/">project repository</a> for details.
+    </p>
+  </footer>
+
+  <script>
+    const form = document.getElementById("job-form");
+    const statusCard = document.getElementById("status-card");
+    const jobIdEl = document.getElementById("job-id");
+    const jobStatusEl = document.getElementById("job-status");
+    const jobQueueEl = document.getElementById("job-queue");
+    const jobMappingEl = document.getElementById("job-mapping");
+    const jobProgressWrap = document.getElementById("job-progress-wrap");
+    const jobProgressEl = document.getElementById("job-progress");
+    const jobStageEl = document.getElementById("job-stage");
+    const jobErrorEl = document.getElementById("job-error");
+    const jobResultEl = document.getElementById("job-result");
+    const downloadLink = document.getElementById("download-link");
+    const abortButton = document.getElementById("abort-button");
+    let currentJobId = null;
+    let pollTimer = null;
+
+    abortButton.addEventListener("click", async () => {
+      if (!currentJobId) return;
+      abortButton.disabled = true;
+      await fetch(`/api/jobs/${currentJobId}/cancel`, { method: "POST" });
+      abortButton.hidden = true;
+      abortButton.disabled = false;
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      // Drop empty optional numeric fields so the server sees them as absent.
+      for (const key of ["log2fc_col", "pvalue_col", "nb_modules_to_find"]) {
+        if (data.get(key) === "") data.delete(key);
+      }
+
+      // Stop any poll loop still running for a previous job.
+      if (pollTimer) {
+        clearTimeout(pollTimer);
+        pollTimer = null;
+      }
+
+      statusCard.hidden = false;
+      jobErrorEl.hidden = true;
+      jobResultEl.hidden = true;
+      jobQueueEl.hidden = true;
+      jobMappingEl.hidden = true;
+      jobProgressWrap.hidden = true;
+      // Show the abort button immediately; the poll loop refines its state.
+      abortButton.hidden = false;
+      jobStatusEl.textContent = "submitting…";
+
+      const response = await fetch("/api/jobs", { method: "POST", body: data });
+      if (!response.ok) {
+        const detail = await response.json().catch(() => ({}));
+        jobStatusEl.textContent = "error";
+        jobErrorEl.hidden = false;
+        jobErrorEl.textContent = detail.detail || response.statusText;
+        return;
+      }
+      const { job_id } = await response.json();
+      currentJobId = job_id;
+      jobIdEl.textContent = job_id;
+      poll(job_id);
+    });
+
+    async function poll(jobId) {
+      // Ignore a stale poll loop from a job that has been superseded.
+      if (jobId !== currentJobId) return;
+
+      const response = await fetch(`/api/jobs/${jobId}`);
+      const job = await response.json();
+      jobStatusEl.textContent = job.status;
+
+      if (job.status === "queued" && job.queued_ahead > 0) {
+        jobQueueEl.hidden = false;
+        jobQueueEl.textContent =
+          `${job.queued_ahead} job(s) ahead of yours in the queue.`;
+      } else {
+        jobQueueEl.hidden = true;
+      }
+
+      if (job.mapping && job.mapping.total) {
+        const pct = (job.mapping.proportion * 100).toFixed(1);
+        jobMappingEl.hidden = false;
+        jobMappingEl.textContent =
+          `Mapped ${job.mapping.mapped}/${job.mapping.total} gene identifiers ` +
+          `(${pct}%) to '${job.mapping.specie}'.`;
+        if (job.mapping.proportion < 0.5) {
+          jobMappingEl.textContent +=
+            " Low mapping rate — the selected species may be wrong.";
+          jobMappingEl.classList.add("warning");
+        } else {
+          jobMappingEl.classList.remove("warning");
+        }
+      } else {
+        jobMappingEl.hidden = true;
+      }
+
+      if (job.status === "running") {
+        jobProgressWrap.hidden = false;
+        jobProgressEl.value = job.progress || 0;
+        jobStageEl.textContent = job.stage
+          ? ` ${job.stage} (${Math.round((job.progress || 0) * 100)}%)`
+          : "";
+      } else {
+        jobProgressWrap.hidden = true;
+      }
+
+      // The abort button is available while the job is queued or running.
+      abortButton.hidden = !(job.status === "queued" || job.status === "running");
+
+      if (job.status === "done") {
+        jobResultEl.hidden = false;
+        downloadLink.href = `/api/jobs/${jobId}/result`;
+        return;
+      }
+      if (job.status === "error") {
+        jobErrorEl.hidden = false;
+        jobErrorEl.textContent = job.error || "unknown error";
+        return;
+      }
+      if (job.status === "cancelled") {
+        jobStatusEl.textContent = "cancelled";
+        return;
+      }
+      pollTimer = setTimeout(() => poll(jobId), 2000);
+    }
+  </script>
+</body>
+
+</html>

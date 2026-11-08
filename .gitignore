@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# data
+legacy/amine/data/fadi
+
+# Test / coverage / tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Data and results (downloaded or generated)
+data/real/ppi/
+data/models/
+data/results/
+src/data/
+jobs/
+web/jobs/
+jobs/
+benchmarks/artificial/results/
+*.xlsx
+!benchmarks/methods.xlsx
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Legacy databases and secrets
+*.sqlite3
+*.db
+.env
+
+# Original source copies and papers (kept locally for provenance; the
+# competitor sources needed for the benchmark are preserved under
+# benchmarks/competitors/, and the golden-test reference under tests/reference/).
+old_code/
+
+# Roo Code configurations
+.roo
+.roorules

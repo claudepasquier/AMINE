@@ -1,0 +1,135 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "amine"
+version = "1.0.0"
+description = "Active Module Identification through Network Embedding"
+readme = "README.md"
+license = { text = "GPL-3.0-or-later" }
+authors = [
+    { name = "Claude Pasquier", email = "claude.pasquier@univ-cotedazur.fr" },
+]
+maintainers = [
+    { name = "AMINE maintainers" },
+]
+requires-python = ">=3.10"
+keywords = [
+    "bioinformatics",
+    "network-embedding",
+    "active-module-identification",
+    "protein-protein-interaction",
+    "node2vec",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "networkx>=3.1",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "pandas>=2.0",
+    "scikit-learn>=1.3",
+    "gensim>=4.3",
+    "numba>=0.57",
+    "powerlaw>=1.5",
+    "tqdm>=4.66",
+    "openpyxl>=3.1",
+    "xlrd>=2.0",
+    "pyyaml>=6.0",
+    "python-levenshtein>=0.23",
+    "goatools>=1.4",
+]
+
+[project.optional-dependencies]
+web = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    "python-multipart>=0.0.9",
+    "jinja2>=3.1",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.4",
+    "black>=24.0",
+]
+bench = [
+    "matplotlib>=3.8",
+]
+
+[project.scripts]
+amine = "amine.__main__:main"
+amine-download = "amine.download_data:main"
+amine-artificial = "amine.process_artificial_network:main"
+
+[project.urls]
+Homepage = "https://github.com/claudepasquier/amine"
+Documentation = "https://github.com/claudepasquier/amine#readme"
+Source = "https://github.com/claudepasquier/amine"
+"Bug Tracker" = "https://github.com/claudepasquier/amine/issues"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["amine*"]
+
+[tool.setuptools.package-data]
+amine = ["config.yaml", "dimension_reduction/pecanpy/LICENCE.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+# Vendored / faithfully-ported legacy code is excluded from linting: it is kept
+# byte-for-byte close to its upstream source for reproducibility.
+extend-exclude = [
+    "old_code",
+    "tests/reference",
+    "src/amine/dimension_reduction/pecanpy",
+    "src/amine/dimension_reduction/node2vec.py",
+    "src/amine/graph_generation",
+    "src/amine/benchmarks/algorithms",
+    "src/amine/benchmarks/embedding.py",
+    "src/amine/benchmarks/my_flame.py",
+    "src/amine/benchmarks/optics_clustering.py",
+    "src/amine/benchmarks/process_artificial_network.py",
+    "src/amine/process_real_network_test.py",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+# E501: line length is handled by black.
+# E731: lambda assignments are idiomatic for the fitness functions here.
+# B905: explicit ``strict=`` on zip() is churn on legacy code.
+# B007: unused loop control variables are common in the numerical code.
+ignore = ["E501", "E731", "B905", "B007"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI requires File()/Form()/Depends() to be called in argument defaults.
+extend-immutable-calls = [
+    "fastapi.File",
+    "fastapi.Form",
+    "fastapi.Depends",
+    "fastapi.Query",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+extend-exclude = '''
+/(old_code|tests/reference|src/amine/dimension_reduction/pecanpy|src/amine/dimension_reduction/node2vec\.py|src/amine/graph_generation|src/amine/benchmarks/algorithms|src/amine/benchmarks/embedding\.py|src/amine/benchmarks/my_flame\.py|src/amine/benchmarks/optics_clustering\.py|src/amine/benchmarks/process_artificial_network\.py|src/amine/process_real_network_test\.py)/
+'''

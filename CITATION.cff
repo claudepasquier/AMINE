@@ -1,0 +1,53 @@
+cff-version: 1.2.0
+message: "If you use AMINE, please cite the article below."
+title: "AMINE — Active Module Identification through Network Embedding"
+abstract: >-
+  AMINE identifies active modules in biological interaction networks by
+  combining network embedding (node2vec) with a greedy module search and a
+  statistical background correction. This repository is the unified,
+  modernized version of the software, including a command-line interface and
+  a web application.
+type: software
+version: 1.0.0
+date-released: "2026-11-03"
+license: GPL-3.0-or-later
+repository-code: "https://github.com/claudepasquier/amine"
+url: "https://github.com/claudepasquier/amine"
+keywords:
+  - bioinformatics
+  - network embedding
+  - active module identification
+  - protein-protein interaction
+  - node2vec
+authors:
+  - family-names: Pasquier
+    given-names: Claude
+    email: claude.pasquier@univ-cotedazur.fr
+    affiliation: "I3S Laboratory, CNRS, Université Côte d'Azur"
+  - family-names: Guerlais
+    given-names: Vincent
+  - family-names: Pallez
+    given-names: Denis
+  - family-names: Rapetti-Mauss
+    given-names: Raphaël
+  - family-names: Soriani
+    given-names: Olivier
+preferred-citation:
+  type: article
+  title: "A network embedding approach to identify active modules in biological interaction networks"
+  authors:
+    - family-names: Pasquier
+      given-names: Claude
+    - family-names: Guerlais
+      given-names: Vincent
+    - family-names: Pallez
+      given-names: Denis
+    - family-names: Rapetti-Mauss
+      given-names: Raphaël
+    - family-names: Soriani
+      given-names: Olivier
+  journal: "Life Science Alliance"
+  volume: 6
+  issue: 9
+  year: 2023
+  doi: "10.26508/lsa.202201550"
