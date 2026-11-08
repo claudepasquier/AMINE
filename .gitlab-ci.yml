@@ -63,10 +63,10 @@ build-image:
         echo "No registry credentials provided; skipping login";
       fi
   script:
-    - podman --storage-driver=vfs build
+    - podman build
         --build-arg BASE_IMAGE="bin.koda.cnrs.fr/docker-ci/python:3.12-slim"
         --build-arg AMINE_SPECIES="human"
         -t "$IMAGE:$CI_COMMIT_SHORT_SHA"
         -t "$IMAGE:latest" .
-    - podman --storage-driver=vfs push "$IMAGE:$CI_COMMIT_SHORT_SHA"
-    - podman --storage-driver=vfs push "$IMAGE:latest"
+    - podman push "$IMAGE:$CI_COMMIT_SHORT_SHA"
+    - podman push "$IMAGE:latest"
