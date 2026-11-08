@@ -10,7 +10,8 @@
 # Run:
 #   docker run -p 8000:8000 -v amine-data:/app/data -v amine-jobs:/app/jobs amine-web
 
-FROM src.koda.cnrs.fr:443/dsi/dependency_proxy/containers/python:3.12-slim
+ARG BASE_IMAGE=python:3.12-slim
+FROM ${BASE_IMAGE}
 
 ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \

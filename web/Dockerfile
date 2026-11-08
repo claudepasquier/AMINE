@@ -10,7 +10,8 @@
 # serves the FastAPI application with uvicorn. It is compatible with free
 # container hosts such as Render, Fly.io and Hugging Face Spaces.
 
-FROM src.koda.cnrs.fr:443/dsi/dependency_proxy/containers/python:3.12-slim
+ARG BASE_IMAGE=python:3.12-slim
+FROM ${BASE_IMAGE}
 
 ENV PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
