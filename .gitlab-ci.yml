@@ -71,9 +71,11 @@ build-image:
         echo "No registry credentials provided; skipping login";
       fi
   script:
+    # AMINE_SPECIES is empty: the Koda runner's proxy blocks string-db.org,
+    # so the STRING data is downloaded at runtime instead of build time.
     - podman build
         --build-arg BASE_IMAGE="bin.koda.cnrs.fr/docker-ci/python:3.12-slim"
-        --build-arg AMINE_SPECIES="human"
+        --build-arg AMINE_SPECIES=""
         -t "$IMAGE:$CI_COMMIT_SHORT_SHA"
         -t "$IMAGE:latest" .
     - podman push "$IMAGE:$CI_COMMIT_SHORT_SHA"
