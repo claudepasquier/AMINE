@@ -20,10 +20,13 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-# Install build dependencies required by some scientific wheels.
-RUN apt-get update \
+# Install build dependencies required by some scientific wheels. This is
+# best-effort: offline runners (e.g. Koda) block the Debian mirrors, in which
+# case we fall back to prebuilt wheels from PyPI.
+RUN (apt-get update \
     && apt-get install -y --no-install-recommends build-essential \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*) \
+    || echo "apt-get unavailable (offline runner); relying on prebuilt wheels"
 
 # Copy the project metadata and sources.
 COPY pyproject.toml README.md LICENSE ./
