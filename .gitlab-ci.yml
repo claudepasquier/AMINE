@@ -82,5 +82,5 @@ build-image:
     # enabled on Koda, the push returns 404 and the job would otherwise fail.
     # Enable the registry (Settings -> General -> Container Registry) to make
     # the push effective.
-    - podman push "$IMAGE:$CI_COMMIT_SHORT_SHA" || echo "WARNING: push failed - is the Container Registry enabled for this project?"
-    - podman push "$IMAGE:latest" || echo "WARNING: push failed - is the Container Registry enabled for this project?"
+    - 'podman push "$IMAGE:$CI_COMMIT_SHORT_SHA" || echo "WARNING: push failed - is the Container Registry enabled for this project?"'
+    - 'podman push "$IMAGE:latest" || echo "WARNING: push failed - is the Container Registry enabled for this project?"'
