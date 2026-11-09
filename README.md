@@ -3,8 +3,7 @@
 [![Koda CI](https://src.koda.cnrs.fr/i3s-research/amine/badges/main/pipeline.svg)](https://src.koda.cnrs.fr/i3s-research/amine/-/pipelines)
 [![GitHub CI](https://github.com/claudepasquier/amine/actions/workflows/ci.yml/badge.svg)](https://github.com/claudepasquier/amine/actions/workflows/ci.yml)
 [![License: GPL v3+](https://img.shields.io/badge/License-GPLv3%2B-blue.svg)](LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.0000000.svg)](https://doi.org/10.5281/zenodo.0000000)
-
+[![DOI](https://zenodo.org/badge/1450529662.svg)](https://doi.org/10.5281/zenodo.24075122)
 AMINE identifies active modules (connected sets of genes) in biological
 interaction networks by combining network embedding (node2vec) with a greedy
 module search and a statistical background correction. It was introduced in:
